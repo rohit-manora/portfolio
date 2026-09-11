@@ -49,13 +49,19 @@ npm run dev          # http://localhost:3000
 cp .env.example .env.local
 ```
 
-| Variable | Purpose |
-|---|---|
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL. Drives `<link rel="canonical">`, Open Graph URLs, `sitemap.xml` and `robots.txt`. |
+| Variable | Required | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | No | Canonical URL. Drives `<link rel="canonical">`, Open Graph URLs, `sitemap.xml` and `robots.txt`. |
 
-**Set this before deploying** — it defaults to a placeholder, and canonical tags pointing at the
-wrong host will hurt search indexing. No other environment variables are required, and no secrets
-exist in this project.
+**On Vercel this can be left unset** — the production domain is read automatically from
+`VERCEL_PROJECT_PRODUCTION_URL`. Set it only for a custom domain.
+
+Resolution order is `NEXT_PUBLIC_SITE_URL` → Vercel's production domain → a hardcoded fallback.
+The resolver tolerates a blank value, surrounding whitespace, a missing protocol and a trailing
+slash; anything unparseable falls through to the next candidate. A blank value is treated as unset
+rather than throwing at build time.
+
+No other environment variables are required, and no secrets exist in this project.
 
 ---
 
